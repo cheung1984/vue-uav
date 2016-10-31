@@ -26,51 +26,60 @@
         </div>
         <div class="share-masker" v-show="masker"></div>
     </div>
-    <div class="loading"><p>抽奖中...</p></div>
+    <loading v-show="isLoading"></loading>
   </div>
 
 </template>
 
 <script>
+import loading from '../components/loading.vue';
+
 export default {
     data() {
         return {
-          guize:false,
-          choujiang:false,
-          masker:false
+            guize: false,
+            choujiang: false,
+            masker: false,
+            isLoading: false
         };
     },
     computed: {},
-    ready() {},
+    ready() {
+
+    },
     attached() {},
     methods: {
-        //判断登录functionId: 'userInfo/login',
         isLogin: function() {
             var vm = this;
-            this.choujiang = true;
-            vm.$http.get('/client', {params: {functionId: 'user/getUserInfo', body: {} }})
-                .then((response) => {
-                  console.log(response);
-                },(response) => {
-                    console.log(response);
-                });
+            var data = {
+                functionId: "userInfo/login",
+                body: {}
+            }
+            vm.$http.post('/client', data).then((response) => {
+                this.choujiang = true;
+            }, (response) => {
+                console.log(response);
+            });
         },
-        closeChouJiang:function(){
+        closeChouJiang: function() {
             this.choujiang = false;
             this.masker = false;
         },
-        showGuiZe:function(){
+        showGuiZe: function() {
             this.guize = true;
         },
-        closeGuiZe:function(){
+        closeGuiZe: function() {
             this.guize = false;
         },
-        showMasker:function(){
+        showMasker: function() {
             this.masker = true;
         }
     },
-    components: {}
+    components: {
+        "loading": loading
+    }
 };
+
 </script>
 
 <style lang="css">
